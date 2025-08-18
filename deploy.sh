@@ -20,6 +20,8 @@ PROJECT_ID=${PROJECT_ID:-}
 REGION=${REGION:-europe-west1}
 SERVICE_NAME=${SERVICE_NAME:-open-ui-chat}
 IMAGE=${IMAGE:-ghcr.io/danny-avila/librechat-dev:latest}
+# The upstream image listens on 3080 by default; set Cloud Run container port accordingly
+CONTAINER_PORT=${CONTAINER_PORT:-3080}
 # Artifact Registry mirror settings (override in .env if desired)
 AR_REPO=${AR_REPO:-$SERVICE_NAME}
 AR_IMAGE_NAME=${AR_IMAGE_NAME:-$SERVICE_NAME}
@@ -85,6 +87,7 @@ build_args() {
     --region="$REGION"
     --platform=managed
     --execution-environment=gen2
+    --port="$CONTAINER_PORT"
     --cpu="$CPU" --memory="$MEMORY" --timeout="$TIMEOUT"
   )
 
