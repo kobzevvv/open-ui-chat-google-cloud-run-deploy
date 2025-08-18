@@ -1,0 +1,19 @@
+# Keep secrets out of git
+.env
+
+# Common local files
+.DS_Store
+node_modules/
+
+# App-runtime artifacts (if any are created locally)
+logs/
+uploads/
+images/
+meili_data*/
+data-node/
+
+
+
+
+
+

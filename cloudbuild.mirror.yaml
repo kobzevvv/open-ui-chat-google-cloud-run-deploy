@@ -1,0 +1,16 @@
+substitutions:
+  _SRC: "ghcr.io/danny-avila/open-ui-chat-dev:latest"
+  _DEST: "europe-west1-docker.pkg.dev/$PROJECT_ID/open-ui-chat/open-ui-chat:latest"
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['pull', '${_SRC}']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['tag', '${_SRC}', '${_DEST}']
+images:
+  - '${_DEST}'
+
+
+
+
+
+
