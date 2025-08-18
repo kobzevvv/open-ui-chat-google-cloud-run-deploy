@@ -1,5 +1,5 @@
 substitutions:
-  _SRC: "ghcr.io/danny-avila/open-ui-chat-dev:latest"
+  _SRC: "ghcr.io/open-webui/open-webui:main"
   _DEST: "europe-west1-docker.pkg.dev/$PROJECT_ID/open-ui-chat/open-ui-chat:latest"
 steps:
   - name: 'gcr.io/cloud-builders/docker'

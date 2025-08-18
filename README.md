@@ -1,9 +1,9 @@
-## Open UI Chat on Google Cloud Run — One-command Deploy
+## Open WebUI on Google Cloud Run — One-command Deploy
 
-This repo provides configuration-as-code to deploy the upstream open-ui-chat container (UI+API) to Google Cloud Run using a single command.
+This repo provides configuration-as-code to deploy the upstream Open WebUI container to Google Cloud Run using a single command.
 
 ### What you get
-- Cloud Run deploy script (`deploy.sh`) that sources `.env`, generates any missing secrets, and deploys with best-practice flags
+- Cloud Run deploy script (`deploy.sh`) that sources `.env` and deploys with best-practice flags
 - Environment template (`.env.example`) with all required/optional variables
 - `.gitignore` that keeps secrets (like `.env`) out of version control
 
@@ -16,7 +16,7 @@ This repo provides configuration-as-code to deploy the upstream open-ui-chat con
 
 ```bash
 cp .env.example .env
-# Edit .env and set at least PROJECT_ID, MONGO_URI, MEILI_HOST, RAG_API_URL
+# Edit .env and set at least PROJECT_ID
 ```
 
 2) Deploy
@@ -31,17 +31,12 @@ On success, the script outputs the Cloud Run service URL. Optionally set `CUSTOM
 
 - Core service
   - `PROJECT_ID` (required), `REGION` (default `europe-west1`), `SERVICE_NAME` (default `open-ui-chat`)
-  - `IMAGE` (default `ghcr.io/danny-avila/open-ui-chat-dev:latest`)
+  - `IMAGE` (default `ghcr.io/open-webui/open-webui:main`)
   - `CPU` (default `2`), `MEMORY` (default `2Gi`), `ALLOW_UNAUTHENTICATED` (default `true`)
   - `AR_REPO`/`AR_IMAGE_NAME` for Artifact Registry mirroring (default: same as `SERVICE_NAME`)
 - Connectivity
-  - `HOST=0.0.0.0` (always set), `MONGO_URI`, `MEILI_HOST`, `RAG_API_URL`
+  - `HOST=0.0.0.0` (always set)
   - Optional: `VPC_CONNECTOR`, `VPC_EGRESS` (`all-traffic` or `private-ranges-only`)
-- Secrets (generated if empty)
-  - `JWT_SECRET`, `JWT_REFRESH_SECRET`, `CREDS_KEY` (64 hex), `CREDS_IV` (32 hex)
-  - Optional: `MEILI_MASTER_KEY`
-- Auth flags (open access example)
-  - `ALLOW_EMAIL_LOGIN=false`, `ALLOW_REGISTRATION=false`, `ALLOW_SOCIAL_LOGIN=false`, `ALLOW_SOCIAL_REGISTRATION=false`
 - Provider keys (optional)
   - `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`
 - Domain mapping (optional)
@@ -49,7 +44,7 @@ On success, the script outputs the Cloud Run service URL. Optionally set `CUSTOM
 
 ### Notes
 - Cloud Run sets `PORT` automatically; `deploy.sh` sets `HOST=0.0.0.0` so the container listens correctly
-- External services (MongoDB Atlas, Meilisearch, RAG API, Cloud SQL/pgvector) must be network-reachable by Cloud Run
+- Open WebUI stores data on local container storage; on Cloud Run that storage is ephemeral between revisions
 - Keep `.env` out of git; this repo ships a `.gitignore` entry for it
 
 ### Logs and verification
@@ -60,7 +55,7 @@ gcloud logging read "resource.type=cloud_run_revision AND resource.labels.servic
   --limit=100 --format=json | jq '.[].jsonPayload.message? // .[].textPayload?'
 ```
 
-### MCP (optional)
-If you need MCP over SSE, configure a reachable public endpoint and expose it to open-ui-chat via environment variables or a proxy service. Cloud Run cannot mount arbitrary config files.
+### References
+- Upstream project: [open-webui/open-webui](https://github.com/open-webui/open-webui)
 
 
