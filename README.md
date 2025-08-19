@@ -12,17 +12,40 @@ This repo provides configuration-as-code to deploy the upstream Open WebUI conta
 - A GCP project selected with billing enabled
 
 ### Quickstart
-1) Copy and edit your environment
+1) Copy and edit your environment (working example)
 
 ```bash
-cp .env.example .env
-# Edit .env and set at least PROJECT_ID
+cat > .env <<'EOF'
+PROJECT_ID=YOUR_GCP_PROJECT_ID
+REGION=europe-west1
+SERVICE_NAME=open-ui-chat
+
+# Open WebUI image and port
+IMAGE=ghcr.io/open-webui/open-webui:main
+CONTAINER_PORT=8080
+
+# Recommended runtime settings
+CPU=2
+MEMORY=2Gi
+ALLOW_UNAUTHENTICATED=true
+
+# Ensure the container listens on all interfaces
+HOST=0.0.0.0
+EOF
 ```
 
 2) Deploy
 
 ```bash
 bash ./deploy.sh
+# Print service URL
+gcloud run services describe "$SERVICE_NAME" --region "$REGION" --format='value(status.url)'
+```
+
+3) Logs
+
+```bash
+gcloud run services logs read "$SERVICE_NAME" --region "$REGION" --limit 100
 ```
 
 On success, the script outputs the Cloud Run service URL. Optionally set `CUSTOM_DOMAIN` in `.env` to auto-create a domain mapping.
