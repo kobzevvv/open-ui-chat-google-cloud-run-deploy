@@ -1,5 +1,8 @@
 # Keep secrets out of git
 .env
+# Ignore backup/variant env files but allow a documented example if ever added
+.env.*
+!.env.example
 
 # Common local files
 .DS_Store
