@@ -1,0 +1,10 @@
+# Keep Docker build context minimal
+**
+
+# Allow only files needed to build the derived image
+!Dockerfile
+!bootstrap.sh
+!mcp_connectors.json
+!/.dockerignore
+
+# If you add other required build-time files, whitelist them here with !pattern

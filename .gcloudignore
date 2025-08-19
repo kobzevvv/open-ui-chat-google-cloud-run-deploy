@@ -1,0 +1,13 @@
+# Reduce Cloud Build source upload to only what's needed for the mirror step
+
+# Exclude everything by default
+**
+
+# Allow only these files
+!.gcloudignore
+!cloudbuild.mirror.yaml
+
+# (If you later add other Cloud Build configs or files that must be uploaded,
+# add additional negated patterns here.)
+
+

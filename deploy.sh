@@ -37,6 +37,8 @@ HOST=${HOST:-0.0.0.0}
 OPENAI_API_KEY=${OPENAI_API_KEY:-}
 ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
 GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+# Optional: seed MCP connectors for custom image
+DEFAULT_MCP_CONNECTORS_JSON=${DEFAULT_MCP_CONNECTORS_JSON:-}
 
 VPC_CONNECTOR=${VPC_CONNECTOR:-}
 VPC_EGRESS=${VPC_EGRESS:-}
@@ -110,6 +112,7 @@ build_args() {
 
   # Required runtime/envs
   add_env HOST "$HOST"
+  add_env DEFAULT_MCP_CONNECTORS_JSON "$DEFAULT_MCP_CONNECTORS_JSON"
 
   # Provider keys (optional)
   add_env OPENAI_API_KEY "$OPENAI_API_KEY"
