@@ -4,8 +4,8 @@ This repo provides configuration-as-code to deploy the upstream Open WebUI conta
 
 ### What you get
 - Cloud Run deploy script (`deploy.sh`) that sources `.env` and deploys with best-practice flags
-- Environment template (`.env.example`) with all required/optional variables
-- `.gitignore` that keeps secrets (like `.env`) out of version control
+- Inline `.env` example in this README; copy it to `.env` and edit
+- `.gitignore` that keeps secrets (like `.env`) and backups (e.g. `.env.bak`) out of version control
 
 ### Prerequisites
 - Google Cloud SDK installed and authenticated (`gcloud auth login`)
@@ -68,7 +68,7 @@ On success, the script outputs the Cloud Run service URL. Optionally set `CUSTOM
 ### Notes
 - Cloud Run sets `PORT` automatically; `deploy.sh` sets `HOST=0.0.0.0` so the container listens correctly
 - Open WebUI stores data on local container storage; on Cloud Run that storage is ephemeral between revisions
-- Keep `.env` out of git; this repo ships a `.gitignore` entry for it
+- Keep `.env` out of git; this repo ships a `.gitignore` entry for it (and ignores backups like `.env.bak`). Backups are not read by the deploy script.
 
 ### Logs and verification
 
