@@ -1,0 +1,10 @@
+[
+  {
+    "name": "hiring-router",
+    "sseUrl": "https://hiring-router-mcp-680223933889.europe-west1.run.app/mcp/sse?session_id=<id>",
+    "messageUrl": "https://hiring-router-mcp-680223933889.europe-west1.run.app/mcp/message/?session_id=<id>",
+    "healthUrl": "https://hiring-router-mcp-680223933889.europe-west1.run.app/health"
+  }
+]
+
+

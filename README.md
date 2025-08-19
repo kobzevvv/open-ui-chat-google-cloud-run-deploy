@@ -70,6 +70,44 @@ On success, the script outputs the Cloud Run service URL. Optionally set `CUSTOM
 - Open WebUI stores data on local container storage; on Cloud Run that storage is ephemeral between revisions
 - Keep `.env` out of git; this repo ships a `.gitignore` entry for it (and ignores backups like `.env.bak`). Backups are not read by the deploy script.
 
+### Optional: Ship a custom image with default MCP connectors
+
+If you want every user to see a pre-configured MCP connector (e.g., your Hiring Router MCP) without manual setup, you can build and use a tiny derived image that seeds connectors at startup.
+
+1) Edit default connectors (or set an env at deploy time)
+
+   - Update `mcp-image/mcp_connectors.json` with your defaults; or
+   - Provide `DEFAULT_MCP_CONNECTORS_JSON` at deploy time (see step 3)
+
+   Example value for `DEFAULT_MCP_CONNECTORS_JSON` (single line or JSON-escaped):
+
+   ```json
+   [
+     {
+       "name": "hiring-router",
+       "sseUrl": "https://hiring-router-mcp-680223933889.europe-west1.run.app/mcp/sse?session_id=<id>",
+       "messageUrl": "https://hiring-router-mcp-680223933889.europe-west1.run.app/mcp/message/?session_id=<id>",
+       "healthUrl": "https://hiring-router-mcp-680223933889.europe-west1.run.app/health"
+     }
+   ]
+   ```
+
+2) Build and publish the custom image (optional; the deploy script can also mirror it later)
+
+   ```bash
+   cd mcp-image
+   docker build -t europe-west1-docker.pkg.dev/$PROJECT_ID/open-ui-chat/open-webui-mcp:latest .
+   docker push europe-west1-docker.pkg.dev/$PROJECT_ID/open-ui-chat/open-webui-mcp:latest
+   ```
+
+3) Point deploy to the custom image and (optionally) set the JSON via env
+
+   - In `.env`, set:
+     - `IMAGE=europe-west1-docker.pkg.dev/$PROJECT_ID/open-ui-chat/open-webui-mcp:latest`
+     - Optionally set `DEFAULT_MCP_CONNECTORS_JSON='[...]'` (minified JSON)
+
+   The startup bootstrap seeds connectors once per fresh container filesystem if none exist yet. If you later want to change defaults, update the JSON and redeploy a new revision.
+
 ### Logs and verification
 
 ```bash
